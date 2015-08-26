@@ -1,11 +1,11 @@
-#include <windows.h>
+#include <Global.h>
+#include <System/Context.h>
 
 int main()
 {
-#ifdef WIN32
-	HINSTANCE instance = static_cast<HINSTANCE>(GetModuleHandle(nullptr));
-#endif
-
+	Context* context = new Context();
+	context->InitContext(1280, 720);
+	delete context;
 	return 0;
 }
 
