@@ -63,10 +63,10 @@ project(PRODUCT_NAME)
 			"_WINDOWS",
 		}
 		links {
-
+			"opengl32.lib"
 		}
 
-	configuration { "Win32 or Oculus", "not Debug" }
+	configuration { "Win32", "not Debug" }
 		buildoptions {
 			-- Whole program optimization
 			"/GL"
