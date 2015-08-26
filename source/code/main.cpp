@@ -9,7 +9,9 @@ int main()
 	return 0;
 }
 
+#ifdef WIN32
 int APIENTRY WinMain(HINSTANCE /*instance*/, HINSTANCE /*prev_instance*/, LPSTR /*args*/, int /*startup_info*/)
 {
 	return main();
 }
+#endif
