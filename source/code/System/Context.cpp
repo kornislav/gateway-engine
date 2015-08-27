@@ -28,7 +28,7 @@ Context::~Context()
 {
 }
 
-bool Context::InitContext(uint width, uint height)
+bool Context::Init(uint width, uint height)
 {
 #ifdef WIN32
 	_instance = static_cast<HINSTANCE>(GetModuleHandle(nullptr));

@@ -4,7 +4,8 @@
 int main()
 {
 	Context* context = new Context();
-	context->InitContext(1280, 720);
+	context->Init(1280, 720);
+	context->Destroy();
 	delete context;
 	return 0;
 }

@@ -8,10 +8,14 @@ public:
 	Context();
 	~Context();
 
-	bool InitContext(uint width, uint height);
+	bool Init(uint width, uint height);
+	void Destroy();
 
 private:
 #ifdef WIN32
+	bool CreateConsole();
+	void DestroyConsole();
+
 	HINSTANCE _instance;
 	HWND _window;
 #endif
