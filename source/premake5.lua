@@ -2,7 +2,8 @@ PRODUCT_NAME = 'Engine'
 
 solution(PRODUCT_NAME)
 	platforms {
-		"Win32"
+		"Win32",
+		"Android"
 	}
 	configurations {
 		"Debug",
@@ -74,4 +75,15 @@ project(PRODUCT_NAME)
 		linkoptions {
 			-- Link-time code generation
 			"/LTCG"
+		}
+
+	-- Android
+	configuration { "Android" }
+		defines {
+			"ANDROID"
+		}
+
+		links {
+			"-lGLESv2",
+			"-lEGL"
 		}
