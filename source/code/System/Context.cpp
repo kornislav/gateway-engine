@@ -43,7 +43,7 @@ bool Context::Init(uint width, uint height)
 #ifndef FINAL
 	if(!CreateConsole())
 	{
-		std::cerr << "Failed to create console window" << std::endl;
+		LogErrorL("Failed to create console window");
 		return false;
 	}
 #endif
@@ -69,21 +69,22 @@ bool Context::Init(uint width, uint height)
         return false;
     }
 
+	LPSTR window_title = "Engine";
     _window = CreateWindowEx(
         WS_EX_CLIENTEDGE,
-        "EngineClass",
-        "Engine",
+        wc.lpszClassName,
+        window_title,
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720,
         nullptr, nullptr, _instance, nullptr);
 
     if(_window == nullptr)
     {
-        LogErrorL("Failed to create window from class: %s", wc.lpszClassName);
+        LogErrorL("Failed to create window: %s", window_title);
         return false;
     }
 
-	LogSuccessL("Created window");
+	LogSuccessL("Created window: %s", window_title);
 
     ShowWindow(_window, SW_SHOWNORMAL);
     UpdateWindow(_window);
