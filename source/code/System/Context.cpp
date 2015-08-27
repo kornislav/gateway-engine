@@ -1,5 +1,11 @@
 #include "Context.h"
-#include <iostream>
+#include <System/Logger.h>
+
+#ifdef WIN32
+#include <cstdio>
+#include <io.h>
+#include <fcntl.h>
+#endif
 
 #ifdef WIN32
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -26,6 +32,7 @@ Context::Context()
 
 Context::~Context()
 {
+	
 }
 
 bool Context::Init(uint width, uint height)
@@ -33,48 +40,55 @@ bool Context::Init(uint width, uint height)
 #ifdef WIN32
 	_instance = static_cast<HINSTANCE>(GetModuleHandle(nullptr));
 
+#ifndef FINAL
+	if(!CreateConsole())
+	{
+		std::cerr << "Failed to create console window" << std::endl;
+		return false;
+	}
+#endif
+
 	WNDCLASSEX wc;
     MSG Msg;
 
-    //Step 1: Registering the Window Class
+	memclr(&wc, sizeof(wc));
+
     wc.cbSize        = sizeof(WNDCLASSEX);
-    wc.style         = 0;
     wc.lpfnWndProc   = WndProc;
-    wc.cbClsExtra    = 0;
-    wc.cbWndExtra    = 0;
     wc.hInstance     = _instance;
-    wc.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
-    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
-    wc.lpszMenuName  = NULL;
+    wc.hIcon         = LoadIcon(nullptr, IDI_APPLICATION);
+    wc.hCursor       = LoadCursor(nullptr, IDC_ARROW);
+    wc.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW+1);
+    wc.lpszMenuName  = nullptr;
     wc.lpszClassName = "EngineClass";
-    wc.hIconSm       = LoadIcon(NULL, IDI_APPLICATION);
+    wc.hIconSm       = wc.hIcon;
 
     if(!RegisterClassEx(&wc))
     {
-        std::cerr << "Failed to register window class" << std::endl;
+        LogErrorL("Failed to register class: %s", wc.lpszClassName);
         return false;
     }
 
-    // Step 2: Creating the Window
     _window = CreateWindowEx(
         WS_EX_CLIENTEDGE,
         "EngineClass",
-        "Gateway",
+        "Engine",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720,
-        NULL, NULL, _instance, NULL);
+        nullptr, nullptr, _instance, nullptr);
 
-    if(_window == NULL)
+    if(_window == nullptr)
     {
-        std::cerr << "Failed to create window" << std::endl;
+        LogErrorL("Failed to create window from class: %s", wc.lpszClassName);
         return false;
     }
+
+	LogSuccessL("Created window");
 
     ShowWindow(_window, SW_SHOWNORMAL);
     UpdateWindow(_window);
 
-	while(GetMessage(&Msg, NULL, 0, 0) > 0)
+	while(GetMessage(&Msg, nullptr, 0, 0) > 0)
     {
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);
@@ -83,3 +97,35 @@ bool Context::Init(uint width, uint height)
 
 	return true;
 }
+
+void Context::Destroy()
+{
+#ifndef FINAL
+	DestroyConsole();
+#endif
+}
+
+#ifdef WIN32
+bool Context::CreateConsole()
+{
+	if(AllocConsole())
+	{
+		int input_handle = _open_osfhandle(reinterpret_cast<intptr_t>(GetStdHandle(STD_INPUT_HANDLE)), _O_TEXT);
+        int output_handle = _open_osfhandle(reinterpret_cast<intptr_t>(GetStdHandle(STD_OUTPUT_HANDLE)), _O_TEXT);
+		int error_handle = _open_osfhandle(reinterpret_cast<intptr_t>(GetStdHandle(STD_ERROR_HANDLE)), _O_TEXT);
+        *stdin = *_fdopen(input_handle, "r");
+        *stdout = *_fdopen(output_handle, "w");
+		*stderr = *_fdopen(error_handle, "w");
+		return true;
+	}
+
+	return false;
+}
+
+void Context::DestroyConsole()
+{
+	fclose(stdout);
+	fclose(stdin);
+	fclose(stderr);
+}
+#endif
