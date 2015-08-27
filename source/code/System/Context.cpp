@@ -25,6 +25,8 @@ LRESULT CALLBACK WndProc(HWND window, UINT message, WPARAM w_param, LPARAM l_par
 #endif
 
 Context::Context()
+	: _width(0)
+	, _height(0)
 {
 
 }
@@ -36,6 +38,9 @@ Context::~Context()
 
 bool Context::Init(uint width, uint height)
 {
+	_width = width;
+	_height = height;
+
 #ifdef WIN32
 	_instance = static_cast<HINSTANCE>(GetModuleHandle(nullptr));
 
@@ -48,7 +53,6 @@ bool Context::Init(uint width, uint height)
 #endif
 
 	WNDCLASSEX wc;
-    MSG Msg;
 
 	memclr(&wc, sizeof(wc));
 
@@ -87,12 +91,6 @@ bool Context::Init(uint width, uint height)
 
     ShowWindow(_window, SW_SHOWNORMAL);
     UpdateWindow(_window);
-
-	while(GetMessage(&Msg, nullptr, 0, 0) > 0)
-    {
-        TranslateMessage(&Msg);
-        DispatchMessage(&Msg);
-    }
 #endif
 
 	return true;
@@ -100,9 +98,11 @@ bool Context::Init(uint width, uint height)
 
 void Context::Destroy()
 {
-#ifndef FINAL
+#if !defined(FINAL) && defined(WIN32)
 	DestroyConsole();
 #endif
+
+	LogMessageL("Destroyed context");
 }
 
 #ifdef WIN32

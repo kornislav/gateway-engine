@@ -5,6 +5,7 @@ int main()
 {
 	Core* core = new Core();
 	core->Init(1280, 720);
+	core->Run();
 	core->Destroy();
 	delete core;
 	return 0;

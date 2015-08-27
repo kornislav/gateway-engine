@@ -2,8 +2,8 @@
 
 #include <Global.h>
 #include <iostream>
+#include <cstdarg>
 
-#ifdef WIN32
 enum LogStatus
 {
 	LOG_DEFAULT,
@@ -19,6 +19,7 @@ static void __Log(LogStatus status, const char* message, ...)
 
 	FILE* output = stdout;
 
+#ifdef WIN32
 	switch (status)
 	{
 	case LOG_ERROR:
@@ -35,6 +36,7 @@ static void __Log(LogStatus status, const char* message, ...)
 	default:
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0F);
 	}
+#endif
 
  	vfprintf_s(output, message, args);
 
@@ -56,5 +58,3 @@ static void __Log(LogStatus status, const char* message, ...)
 #define LogWarningL(message, ...) LogWarning(message "\n", __VA_ARGS__)
 #define LogErrorL(message, ...) LogError(message "\n", __VA_ARGS__)
 #define LogSuccessL(message, ...) LogSuccess(message "\n", __VA_ARGS__)
-
-#endif
