@@ -20,3 +20,4 @@ static void memclr(void* data, size_t size)
 
 // forward declarations
 class Context;
+class Graphics;
