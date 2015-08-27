@@ -5,6 +5,8 @@
 #include <windows.h>
 #endif
 
+#include <System/Logger.h>
+
 // typedefs
 typedef unsigned int uint;
 
@@ -15,3 +17,6 @@ static void memclr(void* data, size_t size)
 {
 	memset(data, 0, size);
 }
+
+// forward declarations
+class Context;

@@ -1,12 +1,12 @@
 #include <Global.h>
-#include <System/Context.h>
+#include <System/Core.h>
 
 int main()
 {
-	Context* context = new Context();
-	context->Init(1280, 720);
-	context->Destroy();
-	delete context;
+	Core* core = new Core();
+	core->Init(1280, 720);
+	core->Destroy();
+	delete core;
 	return 0;
 }
 

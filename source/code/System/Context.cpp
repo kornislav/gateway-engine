@@ -1,5 +1,4 @@
 #include "Context.h"
-#include <System/Logger.h>
 
 #ifdef WIN32
 #include <cstdio>
@@ -8,18 +7,18 @@
 #endif
 
 #ifdef WIN32
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WndProc(HWND window, UINT message, WPARAM w_param, LPARAM l_param)
 {
-    switch(msg)
+    switch(message)
     {
         case WM_CLOSE:
-            DestroyWindow(hwnd);
+            DestroyWindow(window);
         break;
         case WM_DESTROY:
             PostQuitMessage(0);
         break;
         default:
-            return DefWindowProc(hwnd, msg, wParam, lParam);
+            return DefWindowProc(window, message, w_param, l_param);
     }
     return 0;
 }
