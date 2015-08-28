@@ -1,5 +1,5 @@
 # Gateway Engine
-The Gateway Engine is supposed to be you're Gateway into a complete gaming experience.
+The Gateway Engine is supposed to be your Gateway into a complete gaming experience.
 
 ###Features:
 - OpenGL
