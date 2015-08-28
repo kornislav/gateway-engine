@@ -6,6 +6,8 @@
 #include <Global/Defines.h>
 #include <Global/Functions.h>
 
+#include <cinttypes>
+
 // typedefs
 typedef unsigned int uint;
 
