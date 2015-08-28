@@ -2,8 +2,10 @@
 #include "Context.h"
 #include <Renderer/Graphics.h>
 
-Core::Core()
+Core::Core(int argc, char** argv)
 	: _quit(false)
+	, _argc( argc )
+	, _argv( argv )
 {
 	_context = new Context();
 	_graphics = new Graphics();
