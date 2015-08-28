@@ -15,8 +15,11 @@ project(PRODUCT_NAME)
 	kind "WindowedApp"
 	language "C++"
 	files {
+		"code/**.c",
 		"code/**.cpp",
 		"code/**.h",
+		"code/**.hpp",
+		"code/**.inl",
 	}
 
 	targetdir "$(ProjectDir)../bin/"
