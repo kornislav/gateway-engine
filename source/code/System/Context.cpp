@@ -124,5 +124,6 @@ void Context::DestroyConsole()
 	fclose(stdout);
 	fclose(stdin);
 	fclose(stderr);
+	FreeConsole();
 }
 #endif
