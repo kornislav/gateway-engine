@@ -24,7 +24,7 @@ project(PRODUCT_NAME)
 	}
 
 	targetdir "%{prj.location}../bin"
-	targetname ("%{prj.name}_%{cfg.platform}_%{cfg.buildcfg}")
+	targetname ("%{prj.name}-%{cfg.platform}-%{cfg.buildcfg}")
 	debugdir "$%{prj.location}../bin"
 	objdir ("%{prj.location}../build")
 
@@ -63,14 +63,15 @@ project(PRODUCT_NAME)
 
 	-- Win32
 	filter { "platforms:Win32" }
-		architecture "x32"
+		architecture "x86"
 
 	-- Win64
 	filter { "platforms:Win64" }
-		architecture "x64"
+		architecture "x86_64"
 
 	-- Windows
 	filter { "platforms:Win*" }
+		system "windows"
 		defines {
 			"WIN32",
 			"_WINDOWS",
@@ -91,6 +92,7 @@ project(PRODUCT_NAME)
 
 	-- Android
 	filter { "platforms:Android" }
+		system "linux"
 		defines {
 			"ANDROID"
 		}
