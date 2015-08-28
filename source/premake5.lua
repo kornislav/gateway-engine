@@ -3,6 +3,7 @@ PRODUCT_NAME = 'Engine'
 solution(PRODUCT_NAME)
 	platforms {
 		"Win32",
+		"Win64",
 		"Android"
 	}
 	configurations {
@@ -23,7 +24,7 @@ project(PRODUCT_NAME)
 	}
 
 	targetdir "%{prj.location}../bin"
-	targetname ("%{prj.name}_%{cfg.platform}_%{cfg.shortname}")
+	targetname ("%{prj.name}_%{cfg.platform}_%{cfg.buildcfg}")
 	debugdir "$%{prj.location}../bin"
 	objdir ("%{prj.location}../build")
 
@@ -62,6 +63,14 @@ project(PRODUCT_NAME)
 
 	-- Win32
 	filter { "platforms:Win32" }
+		architecture "x32"
+
+	-- Win64
+	filter { "platforms:Win64" }
+		architecture "x64"
+
+	-- Windows
+	filter { "platforms:Win*" }
 		defines {
 			"WIN32",
 			"_WINDOWS",
@@ -70,7 +79,7 @@ project(PRODUCT_NAME)
 			"opengl32.lib"
 		}
 
-	filter { "platforms:Win32", "configurations:not Debug" }
+	filter { "platforms:Win*", "configurations:not Debug" }
 		buildoptions {
 			-- Whole program optimization
 			"/GL"
@@ -85,15 +94,12 @@ project(PRODUCT_NAME)
 		defines {
 			"ANDROID"
 		}
-
 		includedirs {
 			"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
 		}
-
 		libdirs {
 			"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
 		}
-
 		links {
 			"-lGLESv2",
 			"-lEGL"
