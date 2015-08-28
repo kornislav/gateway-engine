@@ -70,7 +70,7 @@ ifeq ($(config),debug_android)
   TARGET = $(TARGETDIR)/Engine-Android-Debug
   OBJDIR = ../build/Android/Debug
   DEFINES += -D_DEBUG -DDEBUG -DANDROID
-  INCLUDES += -Icode -IC:/ndk-r10e/platforms/android-21/arch-arm/usr/include
+  INCLUDES += -Icode -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g
@@ -78,7 +78,7 @@ ifeq ($(config),debug_android)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -l-lGLESv2 -l-lEGL
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -LC:/ndk-r10e/platforms/android-21/arch-arm/usr/lib
+  ALL_LDFLAGS += $(LDFLAGS) -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -151,7 +151,7 @@ ifeq ($(config),release_android)
   TARGET = $(TARGETDIR)/Engine-Android-Release
   OBJDIR = ../build/Android/Release
   DEFINES += -DRELEASE -DNDEBUG -DANDROID
-  INCLUDES += -Icode -IC:/ndk-r10e/platforms/android-21/arch-arm/usr/include
+  INCLUDES += -Icode -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -O3
@@ -159,7 +159,7 @@ ifeq ($(config),release_android)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -l-lGLESv2 -l-lEGL
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -LC:/ndk-r10e/platforms/android-21/arch-arm/usr/lib
+  ALL_LDFLAGS += $(LDFLAGS) -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -232,7 +232,7 @@ ifeq ($(config),final_android)
   TARGET = $(TARGETDIR)/Engine-Android-Final
   OBJDIR = ../build/Android/Final
   DEFINES += -DFINAL -DNDEBUG -DANDROID
-  INCLUDES += -Icode -IC:/ndk-r10e/platforms/android-21/arch-arm/usr/include
+  INCLUDES += -Icode -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O3
@@ -240,7 +240,7 @@ ifeq ($(config),final_android)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -l-lGLESv2 -l-lEGL
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -LC:/ndk-r10e/platforms/android-21/arch-arm/usr/lib -s
+  ALL_LDFLAGS += $(LDFLAGS) -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib" -s
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
