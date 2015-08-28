@@ -43,17 +43,15 @@ void Core::Run()
 	while(!_quit)
     {
 #ifdef WIN32
-		while (PeekMessage(&_msg, 0, 0, 0, PM_REMOVE))
+		while (PeekMessage(&_msg, _context->GetWindow(), 0, 0, PM_REMOVE))
 		{
-			if (_msg.message == WM_QUIT)
-			{
-				_quit = true;
-			}
-			else
-			{
-			    TranslateMessage(&_msg);
-			    DispatchMessage(&_msg);
-			}
+			TranslateMessage(&_msg);
+			DispatchMessage(&_msg);
+		}
+
+		if (PeekMessage(&_msg, 0, WM_QUIT, WM_QUIT, PM_NOREMOVE))
+		{
+			_quit = true;
 		}
 #endif
     }
