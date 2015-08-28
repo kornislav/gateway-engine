@@ -1,9 +1,9 @@
 #include <Global.h>
 #include <System/Core.h>
 
-int main()
+int main(int argc, char** argv)
 {
-	Core* core = new Core();
+	Core* core = new Core(argc, argv);
 	core->Init(1280, 720);
 	core->Run();
 	core->Destroy();
@@ -14,6 +14,6 @@ int main()
 #ifdef WIN32
 int APIENTRY WinMain(HINSTANCE /*instance*/, HINSTANCE /*prev_instance*/, LPSTR /*args*/, int /*startup_info*/)
 {
-	return main();
+	return main(__argc, __argv);
 }
 #endif

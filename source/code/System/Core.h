@@ -5,7 +5,7 @@
 class Core
 {
 public:
-	Core();
+	Core(int _argc, char** _argv);
 	~Core();
 
 	bool Init(uint width, uint height);
@@ -20,6 +20,9 @@ private:
 	Graphics* _graphics;
 
 	bool _quit;
+
+	int _argc;
+	char** _argv;
 
 #ifdef WIN32
 	MSG _msg;
