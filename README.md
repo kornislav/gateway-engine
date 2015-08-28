@@ -1,2 +1,10 @@
-# engine
-A 3D engine in C++
+# Gateway Engine
+The Gateway Engine is supposed to be you're Gateway into a complete gaming experience.
+###Features:
+- OpenGL
+- Windows support
+###Upcoming features:
+- Android support
+- More coming soon...
+
+Distributed under the WTFPL license.
