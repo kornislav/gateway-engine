@@ -86,6 +86,14 @@ project(PRODUCT_NAME)
 			"ANDROID"
 		}
 
+		includedirs {
+			"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
+		}
+
+		libdirs {
+			"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
+		}
+
 		links {
 			"-lGLESv2",
 			"-lEGL"
