@@ -22,17 +22,17 @@ project(PRODUCT_NAME)
 		"code/**.inl",
 	}
 
-	targetdir "$(ProjectDir)../bin/"
-	targetname ("$(ProjectName)_$(PlatformName)_$(Configuration)_" .. _ACTION)
-	debugdir "$(ProjectDir)../bin/"
-	objdir ("$(ProjectDir)../build/" .. _ACTION)
+	targetdir "%{prj.location}../bin"
+	targetname ("%{prj.name}_%{cfg.platform}_%{cfg.shortname}")
+	debugdir "$%{prj.location}../bin"
+	objdir ("%{prj.location}../build")
 
 	includedirs {
-		"$(SolutionDir)/code"
+		"code"
 	}
 
 	-- Global per-configuration settings.
-	configuration { "Debug" }
+	filter { "configurations:Debug" }
 		defines {
 			"_DEBUG",
 			"DEBUG",
@@ -41,7 +41,7 @@ project(PRODUCT_NAME)
 			"Symbols",
 		}
 
-	configuration { "Release" }
+	filter { "configurations:Release" }
 		defines {
 			"RELEASE",
 			"NDEBUG",
@@ -51,7 +51,7 @@ project(PRODUCT_NAME)
 			"OptimizeSpeed",
 		}
 
-	configuration { "Final" }
+	filter { "configurations:Final" }
 		defines {
 			"FINAL",
 			"NDEBUG",
@@ -61,7 +61,7 @@ project(PRODUCT_NAME)
 		}
 
 	-- Win32
-	configuration { "Win32" }
+	filter { "platforms:Win32" }
 		defines {
 			"WIN32",
 			"_WINDOWS",
@@ -70,7 +70,7 @@ project(PRODUCT_NAME)
 			"opengl32.lib"
 		}
 
-	configuration { "Win32", "not Debug" }
+	filter { "platforms:Win32", "configurations:not Debug" }
 		buildoptions {
 			-- Whole program optimization
 			"/GL"
@@ -81,7 +81,7 @@ project(PRODUCT_NAME)
 		}
 
 	-- Android
-	configuration { "Android" }
+	filter { "platforms:Android" }
 		defines {
 			"ANDROID"
 		}
