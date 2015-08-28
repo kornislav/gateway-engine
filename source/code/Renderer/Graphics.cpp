@@ -38,7 +38,7 @@ bool Graphics::Init(Context* context)
 	LogSuccessL("Created rendering context");
 #endif
 
-	glViewport(0, 0, context->GetWidht(), context->GetHeight());
+	glViewport(0, 0, context->GetWidth(), context->GetHeight());
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	FlipBuffers();
 

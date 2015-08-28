@@ -15,7 +15,7 @@ public:
 	HWND GetWindow() { return _window; }
 #endif
 
-	uint GetWidht() { return _width; }
+	uint GetWidth() { return _width; }
 	uint GetHeight() { return _height; }
 
 private:
