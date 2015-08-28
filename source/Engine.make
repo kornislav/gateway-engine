@@ -12,19 +12,46 @@ endif
 
 ifeq ($(config),debug_win32)
   RESCOMP = windres
-  TARGETDIR = $(ProjectDir)../bin
-  TARGET = $(TARGETDIR)/$(ProjectName)_$(PlatformName)_$(Configuration)_gmake.exe
-  OBJDIR = $(ProjectDir)../build/gmake/Win32/Debug
+  TARGETDIR = ../bin
+  TARGET = $(TARGETDIR)/Engine-Win32-Debug.exe
+  OBJDIR = ../build/Win32/Debug
   DEFINES += -D_DEBUG -DDEBUG -DWIN32 -D_WINDOWS
-  INCLUDES += -I"$(SolutionDir)/code"
+  INCLUDES += -Icode
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -g
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -lopengl32.lib
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -mwindows
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -mwindows
+  LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
+  define PREBUILDCMDS
+  endef
+  define PRELINKCMDS
+  endef
+  define POSTBUILDCMDS
+  endef
+all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
+	@:
+
+endif
+
+ifeq ($(config),debug_win64)
+  RESCOMP = windres
+  TARGETDIR = ../bin
+  TARGET = $(TARGETDIR)/Engine-Win64-Debug.exe
+  OBJDIR = ../build/Win64/Debug
+  DEFINES += -D_DEBUG -DDEBUG -DWIN32 -D_WINDOWS
+  INCLUDES += -Icode
+  FORCE_INCLUDE +=
+  ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
+  ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+  LIBS += -lopengl32.lib
+  LDDEPS +=
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -mwindows
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -39,11 +66,11 @@ endif
 
 ifeq ($(config),debug_android)
   RESCOMP = windres
-  TARGETDIR = $(ProjectDir)../bin
-  TARGET = $(TARGETDIR)/$(ProjectName)_$(PlatformName)_$(Configuration)_gmake.exe
-  OBJDIR = $(ProjectDir)../build/gmake/Android/Debug
+  TARGETDIR = ../bin
+  TARGET = $(TARGETDIR)/Engine-Android-Debug
+  OBJDIR = ../build/Android/Debug
   DEFINES += -D_DEBUG -DDEBUG -DANDROID
-  INCLUDES += -I"$(SolutionDir)/code" -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
+  INCLUDES += -Icode -IC:/ndk-r10e/platforms/android-21/arch-arm/usr/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g
@@ -51,7 +78,7 @@ ifeq ($(config),debug_android)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -l-lGLESv2 -l-lEGL
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib -mwindows
+  ALL_LDFLAGS += $(LDFLAGS) -LC:/ndk-r10e/platforms/android-21/arch-arm/usr/lib
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -66,19 +93,46 @@ endif
 
 ifeq ($(config),release_win32)
   RESCOMP = windres
-  TARGETDIR = $(ProjectDir)../bin
-  TARGET = $(TARGETDIR)/$(ProjectName)_$(PlatformName)_$(Configuration)_gmake.exe
-  OBJDIR = $(ProjectDir)../build/gmake/Win32/Release
+  TARGETDIR = ../bin
+  TARGET = $(TARGETDIR)/Engine-Win32-Release.exe
+  OBJDIR = ../build/Win32/Release
   DEFINES += -DRELEASE -DNDEBUG -DWIN32 -D_WINDOWS
-  INCLUDES += -I"$(SolutionDir)/code"
+  INCLUDES += -Icode
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -O3 /GL
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -g -O3 /GL
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -lopengl32.lib
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -mwindows /LTCG
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -mwindows /LTCG
+  LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
+  define PREBUILDCMDS
+  endef
+  define PRELINKCMDS
+  endef
+  define POSTBUILDCMDS
+  endef
+all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
+	@:
+
+endif
+
+ifeq ($(config),release_win64)
+  RESCOMP = windres
+  TARGETDIR = ../bin
+  TARGET = $(TARGETDIR)/Engine-Win64-Release.exe
+  OBJDIR = ../build/Win64/Release
+  DEFINES += -DRELEASE -DNDEBUG -DWIN32 -D_WINDOWS
+  INCLUDES += -Icode
+  FORCE_INCLUDE +=
+  ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -O3 /GL
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
+  ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+  LIBS += -lopengl32.lib
+  LDDEPS +=
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -mwindows /LTCG
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -93,11 +147,11 @@ endif
 
 ifeq ($(config),release_android)
   RESCOMP = windres
-  TARGETDIR = $(ProjectDir)../bin
-  TARGET = $(TARGETDIR)/$(ProjectName)_$(PlatformName)_$(Configuration)_gmake.exe
-  OBJDIR = $(ProjectDir)../build/gmake/Android/Release
+  TARGETDIR = ../bin
+  TARGET = $(TARGETDIR)/Engine-Android-Release
+  OBJDIR = ../build/Android/Release
   DEFINES += -DRELEASE -DNDEBUG -DANDROID
-  INCLUDES += -I"$(SolutionDir)/code" -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
+  INCLUDES += -Icode -IC:/ndk-r10e/platforms/android-21/arch-arm/usr/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -O3
@@ -105,7 +159,7 @@ ifeq ($(config),release_android)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -l-lGLESv2 -l-lEGL
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib -mwindows
+  ALL_LDFLAGS += $(LDFLAGS) -LC:/ndk-r10e/platforms/android-21/arch-arm/usr/lib
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -120,19 +174,46 @@ endif
 
 ifeq ($(config),final_win32)
   RESCOMP = windres
-  TARGETDIR = $(ProjectDir)../bin
-  TARGET = $(TARGETDIR)/$(ProjectName)_$(PlatformName)_$(Configuration)_gmake.exe
-  OBJDIR = $(ProjectDir)../build/gmake/Win32/Final
+  TARGETDIR = ../bin
+  TARGET = $(TARGETDIR)/Engine-Win32-Final.exe
+  OBJDIR = ../build/Win32/Final
   DEFINES += -DFINAL -DNDEBUG -DWIN32 -D_WINDOWS
-  INCLUDES += -I"$(SolutionDir)/code"
+  INCLUDES += -Icode
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O3 /GL
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -O3 /GL
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -lopengl32.lib
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -s -mwindows /LTCG
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -s -mwindows /LTCG
+  LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
+  define PREBUILDCMDS
+  endef
+  define PRELINKCMDS
+  endef
+  define POSTBUILDCMDS
+  endef
+all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
+	@:
+
+endif
+
+ifeq ($(config),final_win64)
+  RESCOMP = windres
+  TARGETDIR = ../bin
+  TARGET = $(TARGETDIR)/Engine-Win64-Final.exe
+  OBJDIR = ../build/Win64/Final
+  DEFINES += -DFINAL -DNDEBUG -DWIN32 -D_WINDOWS
+  INCLUDES += -Icode
+  FORCE_INCLUDE +=
+  ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O3 /GL
+  ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
+  ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+  LIBS += -lopengl32.lib
+  LDDEPS +=
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s -mwindows /LTCG
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -147,11 +228,11 @@ endif
 
 ifeq ($(config),final_android)
   RESCOMP = windres
-  TARGETDIR = $(ProjectDir)../bin
-  TARGET = $(TARGETDIR)/$(ProjectName)_$(PlatformName)_$(Configuration)_gmake.exe
-  OBJDIR = $(ProjectDir)../build/gmake/Android/Final
+  TARGETDIR = ../bin
+  TARGET = $(TARGETDIR)/Engine-Android-Final
+  OBJDIR = ../build/Android/Final
   DEFINES += -DFINAL -DNDEBUG -DANDROID
-  INCLUDES += -I"$(SolutionDir)/code" -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
+  INCLUDES += -Icode -IC:/ndk-r10e/platforms/android-21/arch-arm/usr/include
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O3
@@ -159,7 +240,7 @@ ifeq ($(config),final_android)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -l-lGLESv2 -l-lEGL
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib -s -mwindows
+  ALL_LDFLAGS += $(LDFLAGS) -LC:/ndk-r10e/platforms/android-21/arch-arm/usr/lib -s
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -176,6 +257,7 @@ OBJECTS := \
 	$(OBJDIR)/Graphics.o \
 	$(OBJDIR)/Context.o \
 	$(OBJDIR)/Core.o \
+	$(OBJDIR)/Triangle.o \
 	$(OBJDIR)/main.o \
 
 RESOURCES := \
@@ -241,6 +323,9 @@ $(OBJDIR)/Context.o: code/System/Context.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Core.o: code/System/Core.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Triangle.o: code/Triangle.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: code/main.cpp
