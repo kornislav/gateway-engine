@@ -1,8 +1,10 @@
 #pragma once
 
 #include <Global.h>
-#include <iostream>
+#include <cstdio>
+#if !CPP11
 #include <cstdarg>
+#endif
 
 enum LogStatus
 {
@@ -12,6 +14,34 @@ enum LogStatus
 	LOG_SUCCESS
 };
 
+#if CPP11
+template<typename... Params>
+static void __Log(LogStatus status, const char* message, Params... parameters)
+{
+	FILE* output = stdout;
+
+#ifdef WIN32
+	switch (status)
+	{
+	case LOG_ERROR:
+		SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), 0x0C);
+		output = stderr;
+		break;
+	case LOG_WARNING:
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0E);
+		break;
+	case LOG_SUCCESS:
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0A);
+		break;
+	case LOG_DEFAULT:
+	default:
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0F);
+	}
+#endif
+
+	fprintf(output, message, parameters...);
+}
+#else
 static void __Log(LogStatus status, const char* message, ...)
 {
  	va_list args;
@@ -42,6 +72,7 @@ static void __Log(LogStatus status, const char* message, ...)
 
  	va_end(args);
 }
+#endif
 
 #define __STR(x) #x
 #define STR(x) __STR(x)
