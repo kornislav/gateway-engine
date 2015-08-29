@@ -3,7 +3,7 @@ PRODUCT_NAME = 'Engine'
 solution(PRODUCT_NAME)
 	platforms {
 		"Win32",
-		"Win64",
+		"x64",
 		"Android"
 	}
 	configurations {
@@ -31,6 +31,8 @@ project(PRODUCT_NAME)
 	includedirs {
 		"code"
 	}
+
+	include 'customizations'
 
 	-- Global per-configuration settings.
 	filter { "configurations:Debug" }
@@ -66,11 +68,11 @@ project(PRODUCT_NAME)
 		architecture "x86"
 
 	-- Win64
-	filter { "platforms:Win64" }
+	filter { "platforms:x64" }
 		architecture "x86_64"
 
 	-- Windows
-	filter { "platforms:Win*" }
+	filter { "platforms:Win32 or x64" }
 		system "windows"
 		defines {
 			"WIN32",
@@ -80,7 +82,7 @@ project(PRODUCT_NAME)
 			"opengl32.lib"
 		}
 
-	filter { "platforms:Win*", "configurations:not Debug" }
+	filter { "platforms:Win32 or x64", "configurations:not Debug" }
 		buildoptions {
 			-- Whole program optimization
 			"/GL"
@@ -105,4 +107,7 @@ project(PRODUCT_NAME)
 		links {
 			"-lGLESv2",
 			"-lEGL"
+		}
+		buildoptions {
+			"-std=c++11"
 		}
