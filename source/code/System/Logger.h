@@ -79,6 +79,7 @@ static void __Log(LogStatus status, const char* message, ...)
 
 #define LineAndFile(message) "Line " STR(__LINE__) " in " __FILE__ ": " message
 
+#ifdef _MSC_VER
 #define LogMessage(message, ...) __Log(LOG_DEFAULT, message, __VA_ARGS__)
 #define LogWarning(message, ...) __Log(LOG_WARNING, LineAndFile(message), __VA_ARGS__)
 #define LogError(message, ...) __Log(LOG_ERROR, LineAndFile(message), __VA_ARGS__)
@@ -89,3 +90,15 @@ static void __Log(LogStatus status, const char* message, ...)
 #define LogWarningL(message, ...) LogWarning(message "\n", __VA_ARGS__)
 #define LogErrorL(message, ...) LogError(message "\n", __VA_ARGS__)
 #define LogSuccessL(message, ...) LogSuccess(message "\n", __VA_ARGS__)
+#else
+#define LogMessage(message, ...) __Log(LOG_DEFAULT, message, ##__VA_ARGS__)
+#define LogWarning(message, ...) __Log(LOG_WARNING, LineAndFile(message), ##__VA_ARGS__)
+#define LogError(message, ...) __Log(LOG_ERROR, LineAndFile(message), ##__VA_ARGS__)
+#define LogSuccess(message, ...) __Log(LOG_SUCCESS, "Success: " message, ##__VA_ARGS__)
+
+// appends a newline after the message
+#define LogMessageL(message, ...) LogMessage(message "\n", ##__VA_ARGS__)
+#define LogWarningL(message, ...) LogWarning(message "\n", ##__VA_ARGS__)
+#define LogErrorL(message, ...) LogError(message "\n", ##__VA_ARGS__)
+#define LogSuccessL(message, ...) LogSuccess(message "\n", ##__VA_ARGS__)
+#endif
