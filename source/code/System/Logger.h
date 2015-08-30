@@ -5,6 +5,10 @@
 #if !CPP11
 #include <cstdarg>
 #endif
+#ifdef ANDROID
+#include <android/log.h>
+#define LOG_TAG "GatewayEngine"
+#endif
 
 enum LogStatus
 {
@@ -38,8 +42,22 @@ static void __Log(LogStatus status, const char* message, Params... parameters)
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0F);
 	}
 #endif
+#ifdef ANDROID
+	android_LogPriority priority = ANDROID_LOG_INFO;
+	switch (status)
+	{
+	case LOG_ERROR:
+		priority = ANDROID_LOG_ERROR;
+		break;
+	case LOG_WARNING:
+		priority = ANDROID_LOG_WARN;
+		break;
+	}
 
+	__android_log_print(priority, LOG_TAG, message, parameters...);
+#else
 	fprintf(output, message, parameters...);
+#endif
 }
 #else
 static void __Log(LogStatus status, const char* message, ...)
@@ -67,8 +85,22 @@ static void __Log(LogStatus status, const char* message, ...)
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0F);
 	}
 #endif
+#ifdef ANDROID
+	android_LogPriority priority = ANDROID_LOG_INFO;
+	switch (status)
+	{
+	case LOG_ERROR:
+		priority = ANDROID_LOG_ERROR;
+		break;
+	case LOG_WARNING:
+		priority = ANDROID_LOG_WARN;
+		break;
+	}
 
+	__android_log_print(priority, LOG_TAG, message, args);
+#else
  	vfprintf_s(output, message, args);
+#endif
 
  	va_end(args);
 }
