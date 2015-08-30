@@ -4,9 +4,10 @@ The Gateway Engine is supposed to be your Gateway into a complete gaming experie
 ###Features:
 - OpenGL
 - Windows support
+- Android support
 
 ###Upcoming features:
-- Android support
+- Actual rendering of stuff
 - More coming soon...
 
 Distributed under the WTFPL license.
