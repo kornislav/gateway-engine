@@ -111,3 +111,7 @@ project(PRODUCT_NAME)
 		buildoptions {
 			"-std=c++11"
 		}
+		-- Since we're calling this hardcoded from Java we need
+		-- to give it a predetermined name
+		targetname "gateway-engine"
+		targetextension ".so"

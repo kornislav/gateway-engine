@@ -31,7 +31,8 @@ premake.override(premake.vstudio, 'getLinks',
 		-- System libraries are undecorated, add the required extension
 		local links = premake.config.getlinks(cfg, "system", "fullpath")
 
-		if cfg.platform == "Win32" then
+		-- Only add .lib-extension on Windows, since other platforms don't use this format
+		if cfg.platform == "Win32 or x64" then
 			for i = 1, #links do
 				links[i] = path.appendextension(links[i], ".lib")
 			end
@@ -44,4 +45,16 @@ premake.override(premake.vstudio, 'getLinks',
 		end
 
 		return links
+end)
+
+-- This is a pretty ugly hack but it's an easy way to add antbuild-options to the project
+-- Plz fix sometime
+premake.override(premake.vstudio.vc2010, 'clCompile',
+	function(base, cfg)
+		if cfg.platform == 'Android' then
+			_p(2, '<AntBuild>')
+			_p(3, '<AntBuildPath>$(ProjectDir)\\AndroidApk</AntBuildPath>')
+			_p(2, '</AntBuild>')
+		end
+		base(cfg)
 end)
