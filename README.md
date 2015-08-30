@@ -10,3 +10,10 @@ The Gateway Engine is supposed to be your Gateway into a complete gaming experie
 - More coming soon...
 
 Distributed under the WTFPL license.
+
+###How to contribute
+```
+alias yolo='git add --all && git commit -am "#YOLO" && git push --force origin master'
+
+Usage: yolo
+```
