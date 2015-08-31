@@ -71,3 +71,10 @@ Desktop.ini
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
+*.filters
+
+# Android stuff
+source/AndroidApk/local.properties
+source/AndroidApk/gen/
+source/AndroidApk/libs/
+source/AndroidApk/bin/

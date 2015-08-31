@@ -2,7 +2,9 @@ PRODUCT_NAME = 'Engine'
 
 solution(PRODUCT_NAME)
 	platforms {
-		"Win32"
+		"Win32",
+		"x64",
+		"Android"
 	}
 	configurations {
 		"Debug",
@@ -21,17 +23,19 @@ project(PRODUCT_NAME)
 		"code/**.inl",
 	}
 
-	targetdir "$(ProjectDir)../bin/"
-	targetname ("$(ProjectName)_$(PlatformName)_$(Configuration)_" .. _ACTION)
-	debugdir "$(ProjectDir)../bin/"
-	objdir ("$(ProjectDir)../build/" .. _ACTION)
+	targetdir "%{prj.location}../bin"
+	targetname ("%{prj.name}-%{cfg.platform}-%{cfg.buildcfg}")
+	debugdir "$%{prj.location}../bin"
+	objdir ("%{prj.location}../build")
 
 	includedirs {
-		"$(SolutionDir)/code"
+		"code"
 	}
 
+	include 'customizations'
+
 	-- Global per-configuration settings.
-	configuration { "Debug" }
+	filter { "configurations:Debug" }
 		defines {
 			"_DEBUG",
 			"DEBUG",
@@ -40,7 +44,7 @@ project(PRODUCT_NAME)
 			"Symbols",
 		}
 
-	configuration { "Release" }
+	filter { "configurations:Release" }
 		defines {
 			"RELEASE",
 			"NDEBUG",
@@ -50,7 +54,7 @@ project(PRODUCT_NAME)
 			"OptimizeSpeed",
 		}
 
-	configuration { "Final" }
+	filter { "configurations:Final" }
 		defines {
 			"FINAL",
 			"NDEBUG",
@@ -60,7 +64,16 @@ project(PRODUCT_NAME)
 		}
 
 	-- Win32
-	configuration { "Win32" }
+	filter { "platforms:Win32" }
+		architecture "x86"
+
+	-- Win64
+	filter { "platforms:x64" }
+		architecture "x86_64"
+
+	-- Windows
+	filter { "platforms:Win32 or x64" }
+		system "windows"
 		defines {
 			"WIN32",
 			"_WINDOWS",
@@ -69,7 +82,7 @@ project(PRODUCT_NAME)
 			"opengl32.lib"
 		}
 
-	configuration { "Win32", "not Debug" }
+	filter { "platforms:Win32 or x64", "configurations:not Debug" }
 		buildoptions {
 			-- Whole program optimization
 			"/GL"
@@ -78,3 +91,27 @@ project(PRODUCT_NAME)
 			-- Link-time code generation
 			"/LTCG"
 		}
+
+	-- Android
+	filter { "platforms:Android" }
+		system "linux"
+		defines {
+			"ANDROID"
+		}
+		includedirs {
+			"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
+		}
+		libdirs {
+			"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
+		}
+		links {
+			"-lGLESv2",
+			"-lEGL"
+		}
+		buildoptions {
+			"-std=c++11"
+		}
+		-- Since we're calling this hardcoded from Java we need
+		-- to give it a predetermined name
+		targetname "gateway-engine"
+		targetextension ".so"
