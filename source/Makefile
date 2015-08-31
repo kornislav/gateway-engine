@@ -13,8 +13,8 @@ endif
 ifeq ($(config),debug_win32)
   Engine_config = debug_win32
 endif
-ifeq ($(config),debug_win64)
-  Engine_config = debug_win64
+ifeq ($(config),debug_x64)
+  Engine_config = debug_x64
 endif
 ifeq ($(config),debug_android)
   Engine_config = debug_android
@@ -22,8 +22,8 @@ endif
 ifeq ($(config),release_win32)
   Engine_config = release_win32
 endif
-ifeq ($(config),release_win64)
-  Engine_config = release_win64
+ifeq ($(config),release_x64)
+  Engine_config = release_x64
 endif
 ifeq ($(config),release_android)
   Engine_config = release_android
@@ -31,8 +31,8 @@ endif
 ifeq ($(config),final_win32)
   Engine_config = final_win32
 endif
-ifeq ($(config),final_win64)
-  Engine_config = final_win64
+ifeq ($(config),final_x64)
+  Engine_config = final_x64
 endif
 ifeq ($(config),final_android)
   Engine_config = final_android
@@ -58,13 +58,13 @@ help:
 	@echo ""
 	@echo "CONFIGURATIONS:"
 	@echo "  debug_win32"
-	@echo "  debug_win64"
+	@echo "  debug_x64"
 	@echo "  debug_android"
 	@echo "  release_win32"
-	@echo "  release_win64"
+	@echo "  release_x64"
 	@echo "  release_android"
 	@echo "  final_win32"
-	@echo "  final_win64"
+	@echo "  final_x64"
 	@echo "  final_android"
 	@echo ""
 	@echo "TARGETS:"

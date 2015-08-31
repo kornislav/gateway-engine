@@ -37,11 +37,11 @@ all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
 
 endif
 
-ifeq ($(config),debug_win64)
+ifeq ($(config),debug_x64)
   RESCOMP = windres
   TARGETDIR = ../bin
-  TARGET = $(TARGETDIR)/Engine-Win64-Debug.exe
-  OBJDIR = ../build/Win64/Debug
+  TARGET = $(TARGETDIR)/Engine-x64-Debug.exe
+  OBJDIR = ../build/x64/Debug
   DEFINES += -D_DEBUG -DDEBUG -DWIN32 -D_WINDOWS
   INCLUDES += -Icode
   FORCE_INCLUDE +=
@@ -67,16 +67,16 @@ endif
 ifeq ($(config),debug_android)
   RESCOMP = windres
   TARGETDIR = ../bin
-  TARGET = $(TARGETDIR)/Engine-Android-Debug
+  TARGET = $(TARGETDIR)/gateway-engine.so
   OBJDIR = ../build/Android/Debug
   DEFINES += -D_DEBUG -DDEBUG -DANDROID
   INCLUDES += -Icode -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -std=c++11
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -l-lGLESv2 -l-lEGL
+  LIBS += -l-landroid -l-lGLESv2 -l-lEGL
   LDDEPS +=
   ALL_LDFLAGS += $(LDFLAGS) -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
@@ -118,11 +118,11 @@ all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
 
 endif
 
-ifeq ($(config),release_win64)
+ifeq ($(config),release_x64)
   RESCOMP = windres
   TARGETDIR = ../bin
-  TARGET = $(TARGETDIR)/Engine-Win64-Release.exe
-  OBJDIR = ../build/Win64/Release
+  TARGET = $(TARGETDIR)/Engine-x64-Release.exe
+  OBJDIR = ../build/x64/Release
   DEFINES += -DRELEASE -DNDEBUG -DWIN32 -D_WINDOWS
   INCLUDES += -Icode
   FORCE_INCLUDE +=
@@ -148,16 +148,16 @@ endif
 ifeq ($(config),release_android)
   RESCOMP = windres
   TARGETDIR = ../bin
-  TARGET = $(TARGETDIR)/Engine-Android-Release
+  TARGET = $(TARGETDIR)/gateway-engine.so
   OBJDIR = ../build/Android/Release
   DEFINES += -DRELEASE -DNDEBUG -DANDROID
   INCLUDES += -Icode -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -O3
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -O3 -std=c++11
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -l-lGLESv2 -l-lEGL
+  LIBS += -l-landroid -l-lGLESv2 -l-lEGL
   LDDEPS +=
   ALL_LDFLAGS += $(LDFLAGS) -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
@@ -199,11 +199,11 @@ all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
 
 endif
 
-ifeq ($(config),final_win64)
+ifeq ($(config),final_x64)
   RESCOMP = windres
   TARGETDIR = ../bin
-  TARGET = $(TARGETDIR)/Engine-Win64-Final.exe
-  OBJDIR = ../build/Win64/Final
+  TARGET = $(TARGETDIR)/Engine-x64-Final.exe
+  OBJDIR = ../build/x64/Final
   DEFINES += -DFINAL -DNDEBUG -DWIN32 -D_WINDOWS
   INCLUDES += -Icode
   FORCE_INCLUDE +=
@@ -229,16 +229,16 @@ endif
 ifeq ($(config),final_android)
   RESCOMP = windres
   TARGETDIR = ../bin
-  TARGET = $(TARGETDIR)/Engine-Android-Final
+  TARGET = $(TARGETDIR)/gateway-engine.so
   OBJDIR = ../build/Android/Final
   DEFINES += -DFINAL -DNDEBUG -DANDROID
   INCLUDES += -Icode -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O3
+  ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O3 -std=c++11
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -l-lGLESv2 -l-lEGL
+  LIBS += -l-landroid -l-lGLESv2 -l-lEGL
   LDDEPS +=
   ALL_LDFLAGS += $(LDFLAGS) -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib" -s
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
@@ -263,6 +263,24 @@ OBJECTS := \
 RESOURCES := \
 
 CUSTOMFILES := \
+
+ifeq ($(config),debug_android)
+  OBJECTS += \
+	$(OBJDIR)/android_native_app_glue.o \
+
+endif
+
+ifeq ($(config),release_android)
+  OBJECTS += \
+	$(OBJDIR)/android_native_app_glue.o \
+
+endif
+
+ifeq ($(config),final_android)
+  OBJECTS += \
+	$(OBJDIR)/android_native_app_glue.o \
+
+endif
 
 SHELLTYPE := msdos
 ifeq (,$(ComSpec)$(COMSPEC))
@@ -328,6 +346,9 @@ $(OBJDIR)/Core.o: code/System/Core.cpp
 $(OBJDIR)/Triangle.o: code/Triangle.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/android_native_app_glue.o: code/android/android_native_app_glue.c
+	@echo $(notdir $<)
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: code/main.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
