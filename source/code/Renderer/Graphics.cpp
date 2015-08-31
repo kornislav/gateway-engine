@@ -1,7 +1,17 @@
 #include "Graphics.h"
 #include <System/Context.h>
+#ifdef ANDROID
+#include <System/Core.h>
+#include <android/android_native_app_glue.h>
+#include <android/native_activity.h>
+#endif
 
 Graphics::Graphics()
+#ifdef ANDROID
+	: _display(nullptr)
+	, _surface(nullptr)
+	, _context(nullptr)
+#endif
 {
 
 }
@@ -36,10 +46,98 @@ bool Graphics::Init(Context* context)
 	}
 
 	LogSuccessL("Created rendering context");
+#elif defined(ANDROID)
+	if(!_display)
+		_display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+	if(!_display)
+	{
+		LogErrorL("Failed to create EGL display");
+		return false;
+	}
+
+	int maj = 0;
+	int min = 0;
+	if(!eglInitialize(_display, &maj, &min))
+	{
+		LogErrorL("Failed to initialize EGL");
+		return false;
+	}
+
+	LogSuccessL("Initialized EGL version %i.%i", maj, min);
+
+	const EGLint RGBX_8888_ATTRIBS[] =
+	{
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT, EGL_SURFACE_TYPE,
+		EGL_WINDOW_BIT, EGL_BLUE_SIZE, 8, EGL_GREEN_SIZE, 8,
+		EGL_RED_SIZE, 8, EGL_DEPTH_SIZE, 8, EGL_NONE
+	};
+
+	const EGLint RGB_565_ATTRIBS[] =
+	{
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT, EGL_SURFACE_TYPE,
+		EGL_WINDOW_BIT, EGL_BLUE_SIZE, 5, EGL_GREEN_SIZE, 6,
+		EGL_RED_SIZE, 5, EGL_DEPTH_SIZE, 8, EGL_NONE
+	};
+
+	const EGLint* attribList;
+
+	int windowFormat = ANativeWindow_getFormat(Core::GetInstance().GetState()->window);
+
+	if ((windowFormat == WINDOW_FORMAT_RGBA_8888) || (windowFormat == WINDOW_FORMAT_RGBX_8888))
+	{
+		attribList = RGBX_8888_ATTRIBS;
+	}
+	else
+	{
+		attribList = RGB_565_ATTRIBS;
+	}
+
+	EGLConfig config;
+	EGLint numConfigs;
+	if(!eglChooseConfig(_display, attribList, &config, 1, &numConfigs))
+	{
+		LogErrorL("Failed to choose EGL config");
+		return false;
+	}
+
+	EGLint format;
+	eglGetConfigAttrib(_display, config, EGL_NATIVE_VISUAL_ID, &format);
+
+	if(!ANativeWindow_setBuffersGeometry(Core::GetInstance().GetState()->window, 0, 0, format))
+	{
+		LogErrorL("Failed to set EGL buffers geometry");
+		return false;
+	}
+
+	EGLNativeWindowType windowType;
+	_surface = eglCreateWindowSurface(_display, config, Core::GetInstance().GetState()->window, nullptr);
+	if(!_surface)
+	{
+		LogErrorL("Failed to create EGL surface");
+		return false;
+	}
+
+	LogSuccessL("Created EGL surface");
+
+	EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE };
+	_context = eglCreateContext(_display, config, EGL_NO_CONTEXT, contextAttribs);
+	if(!_context)
+	{
+		LogErrorL("Failed to create EGL context");
+		return false;
+	}
+
+	LogSuccessL("Created EGL context");
+
+	eglMakeCurrent(_display, _surface, _surface, _context);
+
+	//eglQuerySurface(_display, _surface, EGL_WIDTH, &width);
+	//eglQuerySurface(_display, _surface, EGL_HEIGHT, &height);
 #endif
 
 	glViewport(0, 0, context->GetWidth(), context->GetHeight());
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	FlipBuffers();
 
 	return true;
@@ -50,6 +148,23 @@ void Graphics::Destroy()
 #ifdef WIN32
 	wglMakeCurrent(_device_context, nullptr);
 	wglDeleteContext(_rendering_context);
+#elif defined(ANDROID)
+	if (_display)
+	{
+		eglMakeCurrent(_display, nullptr, nullptr, nullptr);
+		if(_context)
+		{
+			eglDestroyContext(_display, _context);
+		}
+		if(_surface)
+		{
+			eglDestroySurface(_display, _surface);
+		}
+		eglTerminate(_display);
+	}
+	_display = nullptr;
+	_context = nullptr;
+	_surface = nullptr;
 #endif
 
 	LogMessageL("Destroyed graphics context");

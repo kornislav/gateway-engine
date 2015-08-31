@@ -4,6 +4,10 @@
 #include <cstdio>
 #include <io.h>
 #include <fcntl.h>
+#elif defined(ANDROID)
+#include <android/android_native_app_glue.h>
+#include <Renderer/Graphics.h>
+#include "Core.h"
 #endif
 
 #ifdef WIN32
@@ -11,13 +15,45 @@ LRESULT CALLBACK WndProc(HWND window, UINT message, WPARAM w_param, LPARAM l_par
 {
     switch(message)
     {
-        case WM_DESTROY:
-			PostQuitMessage(0);
+    case WM_DESTROY:
+		PostQuitMessage(0);
         break;
-        default:
-            return DefWindowProc(window, message, w_param, l_param);
+    default:
+        return DefWindowProc(window, message, w_param, l_param);
     }
     return 0;
+}
+#elif defined(ANDROID)
+static void android_handle_cmd(struct android_app* app, int cmd)
+{
+	switch(cmd)
+	{
+	case APP_CMD_INIT_WINDOW:
+	{
+		Core::GetInstance().GetGraphics()->Init(Core::GetInstance().GetContext());
+	}
+	break;
+
+	case APP_CMD_DESTROY:
+	{
+	}
+	break;
+
+	case APP_CMD_TERM_WINDOW:
+	{
+	}
+	break;
+
+	case APP_CMD_RESUME:
+	{
+	}
+	break;
+
+	case APP_CMD_PAUSE:
+	{
+	}
+	break;
+	}
 }
 #endif
 
@@ -88,6 +124,8 @@ bool Context::Init(uint width, uint height)
 
     ShowWindow(_window, SW_SHOWNORMAL);
     UpdateWindow(_window);
+#elif defined(ANDROID)
+	Core::GetInstance().GetState()->onAppCmd = android_handle_cmd;
 #endif
 
 	return true;
