@@ -32,6 +32,12 @@ project(PRODUCT_NAME)
 		"code"
 	}
 
+	-- Exclude Android-file from non-android configs
+	filter { "platforms:not Android" }
+		excludes {
+			"**/android_native_app_glue.c"
+		}
+
 	include 'customizations'
 
 	-- Global per-configuration settings.
@@ -105,6 +111,7 @@ project(PRODUCT_NAME)
 			"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
 		}
 		links {
+			"-landroid",
 			"-lGLESv2",
 			"-lEGL"
 		}

@@ -2,17 +2,21 @@
 #include <System/Core.h>
 #ifdef ANDROID
 #include <jni.h>
+#include <android/android_native_app_glue.h>
 #endif
 
+#ifndef ANDROID
 int main(int argc, char** argv)
 {
-	Core* core = new Core(argc, argv);
-	core->Init(1280, 720);
-	core->Run();
-	core->Destroy();
-	delete core;
+	Core::Initialize();
+	Core& core = Core::GetInstance();
+	core.Init();
+	core.Run();
+	core.Destroy();
+	Core::Deinitialize();
 	return 0;
 }
+#endif
 
 #ifdef WIN32
 int APIENTRY WinMain(HINSTANCE /*instance*/, HINSTANCE /*prev_instance*/, LPSTR /*args*/, int /*startup_info*/)
@@ -20,12 +24,14 @@ int APIENTRY WinMain(HINSTANCE /*instance*/, HINSTANCE /*prev_instance*/, LPSTR 
 	return main(__argc, __argv);
 }
 #elif defined(ANDROID)
-extern "C" {
-	JNIEXPORT void JNICALL Java_com_example_gatewayengine_GLView_InitGateway(JNIEnv* env, jobject obj);
-}
-
-JNIEXPORT void JNICALL Java_com_example_gatewayengine_GLView_InitGateway(JNIEnv* env, jobject obj)
+void android_main(struct android_app* state)
 {
-	main(0, nullptr);
+	app_dummy();
+	Core::Initialize();
+	Core& core = Core::GetInstance();
+	core.Init(state);
+	core.Run();
+	core.Destroy();
+	Core::Deinitialize();
 }
 #endif
