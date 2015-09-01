@@ -37,13 +37,6 @@ bool Core::Init()
 		return false;
 	}
 
-#ifndef ANDROID
-	if(!_graphics->Init(_context))
-	{
-		return false;
-	}
-#endif
-
 	return true;
 }
 
@@ -85,5 +78,13 @@ void Core::Run()
 			}
 		}
 #endif
+		_graphics->BeginFrame();
+		// Do rendering
+		_graphics->EndFrame();
     }
+}
+
+void Core::OnWindowCreate()
+{
+	_graphics->Init(_context);
 }

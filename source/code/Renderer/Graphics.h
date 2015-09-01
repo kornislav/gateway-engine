@@ -18,6 +18,9 @@ public:
 	bool Init(Context* context);
 	void Destroy();
 
+	void BeginFrame();
+	void EndFrame();
+
 	void FlipBuffers();
 
 private:

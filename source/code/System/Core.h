@@ -25,6 +25,9 @@ public:
 
 	void SetQuit(bool quit) { _quit = quit; }
 
+	// Callbacks
+	void OnWindowCreate();
+
 #ifdef ANDROID
 	android_app* GetState() { return _state; }
 #endif

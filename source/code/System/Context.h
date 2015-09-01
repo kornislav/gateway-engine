@@ -1,6 +1,9 @@
 #pragma once
 
 #include <Global.h>
+#ifdef WIN32
+#define WM_CREATED (WM_USER+1)
+#endif
 
 class Context
 {

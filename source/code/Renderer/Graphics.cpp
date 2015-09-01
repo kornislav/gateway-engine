@@ -141,7 +141,7 @@ bool Graphics::Init(Context* context)
 #endif
 
 	glViewport(0, 0, context->GetWidth(), context->GetHeight());
-	glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	FlipBuffers();
 
@@ -173,6 +173,16 @@ void Graphics::Destroy()
 #endif
 
 	LogMessageL("Destroyed graphics context");
+}
+
+void Graphics::BeginFrame()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Graphics::EndFrame()
+{
+	FlipBuffers();
 }
 
 void Graphics::FlipBuffers()

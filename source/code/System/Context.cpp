@@ -6,15 +6,17 @@
 #include <fcntl.h>
 #elif defined(ANDROID)
 #include <android/android_native_app_glue.h>
-#include <Renderer/Graphics.h>
-#include "Core.h"
 #endif
+#include "Core.h"
 
 #ifdef WIN32
 LRESULT CALLBACK WndProc(HWND window, UINT message, WPARAM w_param, LPARAM l_param)
 {
     switch(message)
     {
+	case WM_CREATED:
+		Core::GetInstance().OnWindowCreate();
+		break;
     case WM_DESTROY:
 		PostQuitMessage(0);
         break;
@@ -30,7 +32,7 @@ static void android_handle_cmd(struct android_app* app, int cmd)
 	{
 	case APP_CMD_INIT_WINDOW:
 	{
-		Core::GetInstance().GetGraphics()->Init(Core::GetInstance().GetContext());
+		Core::GetInstance().OnWindowCreate();
 	}
 	break;
 
@@ -121,6 +123,8 @@ bool Context::Init(uint width, uint height)
     }
 
 	LogSuccessL("Created window: %s", window_title);
+
+	SendMessage(_window, WM_CREATED, 0, 0);
 
     ShowWindow(_window, SW_SHOWNORMAL);
     UpdateWindow(_window);
