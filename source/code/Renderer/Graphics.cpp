@@ -103,7 +103,7 @@ bool Graphics::Init(Context* context)
 	EGLint format;
 	eglGetConfigAttrib(_display, config, EGL_NATIVE_VISUAL_ID, &format);
 
-	if(!ANativeWindow_setBuffersGeometry(Core::GetInstance().GetState()->window, 0, 0, format))
+	if(ANativeWindow_setBuffersGeometry(Core::GetInstance().GetState()->window, 0, 0, format))
 	{
 		LogErrorL("Failed to set EGL buffers geometry");
 		return false;
@@ -131,8 +131,13 @@ bool Graphics::Init(Context* context)
 
 	eglMakeCurrent(_display, _surface, _surface, _context);
 
-	//eglQuerySurface(_display, _surface, EGL_WIDTH, &width);
-	//eglQuerySurface(_display, _surface, EGL_HEIGHT, &height);
+	int width;
+	int height;
+
+	eglQuerySurface(_display, _surface, EGL_WIDTH, &width);
+	eglQuerySurface(_display, _surface, EGL_HEIGHT, &height);
+
+	LogMessageL("Preferred size: %dx%d", width, height);
 #endif
 
 	glViewport(0, 0, context->GetWidth(), context->GetHeight());
@@ -174,6 +179,8 @@ void Graphics::FlipBuffers()
 {
 #ifdef WIN32
 	SwapBuffers(_device_context);
+#elif defined(ANDROID)
+	eglSwapBuffers(_display, _surface);
 #endif
 }
 
