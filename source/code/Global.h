@@ -10,6 +10,7 @@
 
 // typedefs
 typedef unsigned int uint;
+typedef unsigned short uint16;
 
 // macros
 

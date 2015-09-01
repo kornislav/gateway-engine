@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Global.h"
-#include "Renderer/Graphics.h"
+#include <Global.h>
 
 class Triangle
 {
@@ -11,12 +10,12 @@ public:
 		float x, y, z, w;
 	};
 
-	typedef std::uint16_t Index;
+	typedef uint16 Index;
 
 	Triangle();
 	~Triangle();
 
 private:
-	GLuint _vertex_buffer;
-	GLuint _element_buffer;
+	uint _vertex_buffer;
+	uint _element_buffer;
 };

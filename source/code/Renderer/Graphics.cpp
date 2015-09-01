@@ -46,6 +46,8 @@ bool Graphics::Init(Context* context)
 	}
 
 	LogSuccessL("Created rendering context");
+
+	InitGLExtensions();
 #elif defined(ANDROID)
 	if(!_display)
 		_display = eglGetDisplay(EGL_DEFAULT_DISPLAY);

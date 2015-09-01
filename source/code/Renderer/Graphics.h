@@ -4,6 +4,7 @@
 
 #ifdef WIN32
 #include <gl/GL.h>
+#include <OpenGL/WGLExtensions.h>
 #elif defined(ANDROID)
 #include <EGL/egl.h>
 #include <GLES/gl.h>
