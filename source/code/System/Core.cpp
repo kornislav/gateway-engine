@@ -1,6 +1,7 @@
 #include "Core.h"
 #include "Context.h"
 #include <Renderer/Graphics.h>
+#include <Renderer/Renderer.h>
 #ifdef ANDROID
 #include <android/looper.h>
 #include <android/android_native_app_glue.h>
