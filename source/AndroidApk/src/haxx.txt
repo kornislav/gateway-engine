@@ -1,0 +1,1 @@
+If this folder is empty git will remove it and vs-android will fail
