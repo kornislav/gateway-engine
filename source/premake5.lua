@@ -32,6 +32,10 @@ project(PRODUCT_NAME)
 		"code"
 	}
 
+	libdirs {
+		"%{prj.location}../lib"
+	}
+
 	-- Exclude Android-file from non-android configs
 	filter { "platforms:not Android" }
 		excludes {
@@ -85,7 +89,8 @@ project(PRODUCT_NAME)
 			"_WINDOWS",
 		}
 		links {
-			"opengl32.lib"
+			"opengl32.lib",
+			"glext.lib"
 		}
 
 	filter { "platforms:Win32 or x64", "configurations:not Debug" }
