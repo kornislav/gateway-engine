@@ -3,6 +3,7 @@
 #include <Global.h>
 #include <Triangle.h>
 #include <vector>
+#include "RenderState.h"
 
 class Renderer
 {
@@ -20,7 +21,7 @@ public:
 
 		for(auto it: _instance->_triangles)
 		{
-			
+			_instance->_render_state->DrawTriangle(it);
 		}
 	}
 
@@ -28,12 +29,14 @@ public:
 
 private:
 	std::vector<Triangle*> _triangles;
+	RenderState* _render_state;
 
 	// Initializes the renderer if it isn't already
 	static void Initialize() { if(!_instance) new Renderer; }
-	Renderer() { _instance = this; }
+	Renderer() {
+		_instance = this;
+		_instance->_render_state = new RenderState();
+	}
 	~Renderer() { _instance = nullptr; }
 	static Renderer* _instance;
 };
-
-Renderer* Renderer::_instance = nullptr;

@@ -80,7 +80,7 @@ void Core::Run()
 		}
 #endif
 		_graphics->BeginFrame();
-		// Do rendering
+		Renderer::Render();
 		_graphics->EndFrame();
     }
 }

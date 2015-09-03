@@ -5,6 +5,8 @@
 #include <android/android_native_app_glue.h>
 #include <android/native_activity.h>
 #endif
+#include <Renderer/Renderer.h>
+#include <Triangle.h>
 
 Graphics::Graphics()
 #ifdef ANDROID
@@ -141,6 +143,8 @@ bool Graphics::Init(Context* context)
 
 	LogMessageL("Preferred size: %dx%d", width, height);
 #endif
+
+	Renderer::Register(new Triangle());
 
 	glViewport(0, 0, context->GetWidth(), context->GetHeight());
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

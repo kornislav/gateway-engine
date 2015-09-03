@@ -15,6 +15,9 @@ public:
 	Triangle();
 	~Triangle();
 
+	uint GetVertexBuffer() { return _vertex_buffer; }
+	uint GetElementBuffer() { return _element_buffer; }
+
 private:
 	uint _vertex_buffer;
 	uint _element_buffer;
