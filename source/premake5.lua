@@ -23,17 +23,18 @@ project(PRODUCT_NAME)
 		"code/**.inl",
 	}
 
-	targetdir "%{prj.location}../bin"
+	targetdir "%{prj.location}../bin/%{cfg.platform}"
 	targetname ("%{prj.name}-%{cfg.platform}-%{cfg.buildcfg}")
-	debugdir "$%{prj.location}../bin"
-	objdir ("%{prj.location}../build")
+	debugdir "$%{prj.location}../bin/%{cfg.platform}"
+	objdir ("%{prj.location}../build/%{cfg.platform}")
 
 	includedirs {
 		"code"
 	}
 
 	libdirs {
-		"%{prj.location}../lib"
+		"%{prj.location}../lib",
+		"%{prj.location}../lib/%{cfg.platform}"
 	}
 
 	-- Exclude Android-file from non-android configs
@@ -90,7 +91,7 @@ project(PRODUCT_NAME)
 		}
 		links {
 			"opengl32.lib",
-			"glext.lib"
+			"glew32s.lib"
 		}
 
 	filter { "platforms:Win32 or x64", "configurations:not Debug" }
