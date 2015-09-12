@@ -11,5 +11,5 @@ public:
 	void DrawTriangle(Triangle* triangle);
 
 private:
-
+	
 };

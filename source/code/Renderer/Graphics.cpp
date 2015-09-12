@@ -48,6 +48,13 @@ bool Graphics::Init(Context* context)
 	}
 
 	LogSuccessL("Created rendering context");
+
+	// Initialize GLEW
+	uint error = glewInit();
+	if(error != GLEW_OK)
+	{
+		LogErrorL("Failed to initialize GLEW: %s", glewGetErrorString(error));
+	}
 #elif defined(ANDROID)
 	if(!_display)
 		_display = eglGetDisplay(EGL_DEFAULT_DISPLAY);

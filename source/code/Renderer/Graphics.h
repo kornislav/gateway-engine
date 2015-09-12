@@ -3,8 +3,9 @@
 #include <Global.h>
 
 #ifdef WIN32
+#define GLEW_STATIC // To use the static lib version of GLEW
+#include <GL/glew.h>
 #include <gl/GL.h>
-#include <OpenGL/WGLExtensions.h>
 #elif defined(ANDROID)
 #include <EGL/egl.h>
 #include <GLES/gl.h>
