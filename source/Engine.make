@@ -12,9 +12,9 @@ endif
 
 ifeq ($(config),debug_win32)
   RESCOMP = windres
-  TARGETDIR = ../bin
+  TARGETDIR = ../bin/Win32
   TARGET = $(TARGETDIR)/Engine-Win32-Debug.exe
-  OBJDIR = ../build/Win32/Debug
+  OBJDIR = ../build/Win32/Win32/Debug
   DEFINES += -D_DEBUG -DDEBUG -DWIN32 -D_WINDOWS
   INCLUDES += -Icode
   FORCE_INCLUDE +=
@@ -22,9 +22,9 @@ ifeq ($(config),debug_win32)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -g
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lopengl32.lib
+  LIBS += -lopengl32.lib -lglew32s.lib
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -mwindows
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -L../lib -L../lib/Win32 -m32 -mwindows
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -39,9 +39,9 @@ endif
 
 ifeq ($(config),debug_x64)
   RESCOMP = windres
-  TARGETDIR = ../bin
+  TARGETDIR = ../bin/x64
   TARGET = $(TARGETDIR)/Engine-x64-Debug.exe
-  OBJDIR = ../build/x64/Debug
+  OBJDIR = ../build/x64/x64/Debug
   DEFINES += -D_DEBUG -DDEBUG -DWIN32 -D_WINDOWS
   INCLUDES += -Icode
   FORCE_INCLUDE +=
@@ -49,9 +49,9 @@ ifeq ($(config),debug_x64)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lopengl32.lib
+  LIBS += -lopengl32.lib -lglew32s.lib
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -mwindows
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -L../lib -L../lib/x64 -m64 -mwindows
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -66,9 +66,9 @@ endif
 
 ifeq ($(config),debug_android)
   RESCOMP = windres
-  TARGETDIR = ../bin
+  TARGETDIR = ../bin/Android
   TARGET = $(TARGETDIR)/gateway-engine.so
-  OBJDIR = ../build/Android/Debug
+  OBJDIR = ../build/Android/Android/Debug
   DEFINES += -D_DEBUG -DDEBUG -DANDROID
   INCLUDES += -Icode -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
   FORCE_INCLUDE +=
@@ -78,7 +78,7 @@ ifeq ($(config),debug_android)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -l-landroid -l-lGLESv2 -l-lEGL
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
+  ALL_LDFLAGS += $(LDFLAGS) -L../lib -L../lib/Android -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -93,9 +93,9 @@ endif
 
 ifeq ($(config),release_win32)
   RESCOMP = windres
-  TARGETDIR = ../bin
+  TARGETDIR = ../bin/Win32
   TARGET = $(TARGETDIR)/Engine-Win32-Release.exe
-  OBJDIR = ../build/Win32/Release
+  OBJDIR = ../build/Win32/Win32/Release
   DEFINES += -DRELEASE -DNDEBUG -DWIN32 -D_WINDOWS
   INCLUDES += -Icode
   FORCE_INCLUDE +=
@@ -103,9 +103,9 @@ ifeq ($(config),release_win32)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -g -O3 /GL
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lopengl32.lib
+  LIBS += -lopengl32.lib -lglew32s.lib
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -mwindows /LTCG
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -L../lib -L../lib/Win32 -m32 -mwindows /LTCG
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -120,9 +120,9 @@ endif
 
 ifeq ($(config),release_x64)
   RESCOMP = windres
-  TARGETDIR = ../bin
+  TARGETDIR = ../bin/x64
   TARGET = $(TARGETDIR)/Engine-x64-Release.exe
-  OBJDIR = ../build/x64/Release
+  OBJDIR = ../build/x64/x64/Release
   DEFINES += -DRELEASE -DNDEBUG -DWIN32 -D_WINDOWS
   INCLUDES += -Icode
   FORCE_INCLUDE +=
@@ -130,9 +130,9 @@ ifeq ($(config),release_x64)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -O3 /GL
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lopengl32.lib
+  LIBS += -lopengl32.lib -lglew32s.lib
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -mwindows /LTCG
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -L../lib -L../lib/x64 -m64 -mwindows /LTCG
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -147,9 +147,9 @@ endif
 
 ifeq ($(config),release_android)
   RESCOMP = windres
-  TARGETDIR = ../bin
+  TARGETDIR = ../bin/Android
   TARGET = $(TARGETDIR)/gateway-engine.so
-  OBJDIR = ../build/Android/Release
+  OBJDIR = ../build/Android/Android/Release
   DEFINES += -DRELEASE -DNDEBUG -DANDROID
   INCLUDES += -Icode -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
   FORCE_INCLUDE +=
@@ -159,7 +159,7 @@ ifeq ($(config),release_android)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -l-landroid -l-lGLESv2 -l-lEGL
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
+  ALL_LDFLAGS += $(LDFLAGS) -L../lib -L../lib/Android -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib"
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -174,9 +174,9 @@ endif
 
 ifeq ($(config),final_win32)
   RESCOMP = windres
-  TARGETDIR = ../bin
+  TARGETDIR = ../bin/Win32
   TARGET = $(TARGETDIR)/Engine-Win32-Final.exe
-  OBJDIR = ../build/Win32/Final
+  OBJDIR = ../build/Win32/Win32/Final
   DEFINES += -DFINAL -DNDEBUG -DWIN32 -D_WINDOWS
   INCLUDES += -Icode
   FORCE_INCLUDE +=
@@ -184,9 +184,9 @@ ifeq ($(config),final_win32)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -O3 /GL
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lopengl32.lib
+  LIBS += -lopengl32.lib -lglew32s.lib
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -s -mwindows /LTCG
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -L../lib -L../lib/Win32 -m32 -s -mwindows /LTCG
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -201,9 +201,9 @@ endif
 
 ifeq ($(config),final_x64)
   RESCOMP = windres
-  TARGETDIR = ../bin
+  TARGETDIR = ../bin/x64
   TARGET = $(TARGETDIR)/Engine-x64-Final.exe
-  OBJDIR = ../build/x64/Final
+  OBJDIR = ../build/x64/x64/Final
   DEFINES += -DFINAL -DNDEBUG -DWIN32 -D_WINDOWS
   INCLUDES += -Icode
   FORCE_INCLUDE +=
@@ -211,9 +211,9 @@ ifeq ($(config),final_x64)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O3 /GL
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lopengl32.lib
+  LIBS += -lopengl32.lib -lglew32s.lib
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s -mwindows /LTCG
+  ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -L../lib -L../lib/x64 -m64 -s -mwindows /LTCG
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -228,9 +228,9 @@ endif
 
 ifeq ($(config),final_android)
   RESCOMP = windres
-  TARGETDIR = ../bin
+  TARGETDIR = ../bin/Android
   TARGET = $(TARGETDIR)/gateway-engine.so
-  OBJDIR = ../build/Android/Final
+  OBJDIR = ../build/Android/Android/Final
   DEFINES += -DFINAL -DNDEBUG -DANDROID
   INCLUDES += -Icode -I"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include"
   FORCE_INCLUDE +=
@@ -240,7 +240,7 @@ ifeq ($(config),final_android)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   LIBS += -l-landroid -l-lGLESv2 -l-lEGL
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib" -s
+  ALL_LDFLAGS += $(LDFLAGS) -L../lib -L../lib/Android -L"$(NDK_ROOT)/platforms/android-21/arch-arm/usr/lib" -s
   LINKCMD = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -255,9 +255,12 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/Graphics.o \
+	$(OBJDIR)/RenderState.o \
+	$(OBJDIR)/Renderer.o \
 	$(OBJDIR)/Context.o \
 	$(OBJDIR)/Core.o \
 	$(OBJDIR)/Triangle.o \
+	$(OBJDIR)/glm.o \
 	$(OBJDIR)/main.o \
 
 RESOURCES := \
@@ -337,6 +340,12 @@ endif
 $(OBJDIR)/Graphics.o: code/Renderer/Graphics.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/RenderState.o: code/Renderer/RenderState.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Renderer.o: code/Renderer/Renderer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Context.o: code/System/Context.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -349,6 +358,9 @@ $(OBJDIR)/Triangle.o: code/Triangle.cpp
 $(OBJDIR)/android_native_app_glue.o: code/android/android_native_app_glue.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/glm.o: code/glm/detail/glm.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: code/main.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
